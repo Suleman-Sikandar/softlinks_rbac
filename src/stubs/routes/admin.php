@@ -14,7 +14,7 @@ Route::get('logout', [AdminLoginController::class, 'logout'])->name('logout');
 /**
  * Admin Routes
  */
-Route::middleware(['auth', 'XSS'])->group(function () {
+Route::middleware(['admin.auth', 'XSS'])->group(function () {
     /**
      * Dashboard Routes
      */

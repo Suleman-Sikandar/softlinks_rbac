@@ -16,7 +16,7 @@ class AuthMiddleware
             if ($request->ajax()) {
                 return response()->json(['error' => 'Unauthenticated'], 401);
             }
-            return redirect()->to('login');
+            return redirect()->guest('/login');
         }
 
         // 2. Permission check
