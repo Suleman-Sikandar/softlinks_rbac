@@ -7,12 +7,17 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class RbacCheckMiddleware
+class AuthMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Permission check
-        if(Auth::guard('admin')->check() && !\validatePermissions($request->route()->uri())){
+        // 1. Authentication Check
+        if (! Auth::guard('admin')->check()) {
+            return redirect()->route('login');
+        }
+
+        // 2. Permission check
+        if(!\validatePermissions($request->route()->uri())){
             abort(403);
         }
         return $next($request);

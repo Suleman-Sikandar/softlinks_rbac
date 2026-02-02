@@ -106,7 +106,7 @@ class DeleteRbac extends Command
         if (File::exists($appPath)) {
             $content = File::get($appPath);
             
-            $middlewareRegistration = "\n        \$middleware->alias([\n            'rbac.check' => \App\Http\Middleware\RbacCheckMiddleware::class,\n            'XSS' => \App\Http\Middleware\XSSMiddleware::class,\n        ]);";
+            $middlewareRegistration = "\n        \$middleware->alias([\n            'auth' => \App\Http\Middleware\AuthMiddleware::class,\n            'XSS' => \App\Http\Middleware\XSSMiddleware::class,\n        ]);";
             
             if (str_contains($content, $middlewareRegistration)) {
                 $content = str_replace($middlewareRegistration, '', $content);

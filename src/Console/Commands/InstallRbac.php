@@ -95,15 +95,17 @@ class InstallRbac extends Command
             $content = File::get($appPath);
             
             // Check if already registered
-            if (str_contains($content, "'rbac.check'") || str_contains($content, '"rbac.check"')) {
+            if (str_contains($content, "'XSS'") || str_contains($content, '"XSS"')) {
                 $this->info("Middlewares already registered in bootstrap/app.php");
                 return;
             }
  
-            $middlewareRegistration = "\n        \$middleware->alias([\n            'rbac.check' => \App\Http\Middleware\RbacCheckMiddleware::class,\n            'XSS' => \App\Http\Middleware\XSSMiddleware::class,\n        ]);";
+            $middlewareRegistration = "\n        \$middleware->alias([\n            'auth' => \App\Http\Middleware\AuthMiddleware::class,\n            'XSS' => \App\Http\Middleware\XSSMiddleware::class,\n        ]);";
             
-            // Look for withMiddleware(function (Middleware $middleware) {
-            $pattern = "/(withMiddleware\s*\(\s*function\s*\(\s*Middleware\s*\\\$middleware\s*\)\s*\{)/i";
+            // Match ->withMiddleware(function (Middleware $middleware) { ... }) 
+            // OR ->withMiddleware(function ($middleware) { ... })
+            // Looking for the closing paren or brace of the function if it's empty
+            $pattern = "/(withMiddleware\s*\(\s*function\s*\(\s*(Middleware\s+)?\\\$[\w]+\s*\)\s*\{)/i";
             
             if (preg_match($pattern, $content)) {
                 $content = preg_replace($pattern, "$1" . $middlewareRegistration, $content);
