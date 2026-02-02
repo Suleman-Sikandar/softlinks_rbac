@@ -11,14 +11,15 @@ use Illuminate\Support\Facades\Route;
 Route::get('login', [AdminLoginController::class, 'index'])->name('login');
 Route::post('login', [AdminLoginController::class, 'doLogin']);
 Route::get('logout', [AdminLoginController::class, 'logout'])->name('logout');
-/**
- * Admin Routes
- */
-Route::middleware(['admin.auth', 'XSS'])->group(function () {
     /**
      * Dashboard Routes
      */
     Route::get('/admin', [DashboardController::class, 'index']);
+
+/**
+ * Admin Routes
+ */
+Route::middleware(['admin.auth', 'XSS'])->group(function () {
 
 
 /**
