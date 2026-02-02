@@ -13,7 +13,10 @@ class AuthMiddleware
     {
         // 1. Authentication Check
         if (! Auth::guard('admin')->check()) {
-            return redirect()->route('login');
+            if ($request->ajax()) {
+                return response()->json(['error' => 'Unauthenticated'], 401);
+            }
+            return redirect()->to('login');
         }
 
         // 2. Permission check

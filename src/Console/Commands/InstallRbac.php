@@ -102,17 +102,24 @@ class InstallRbac extends Command
  
             $middlewareRegistration = "\n        \$middleware->alias([\n            'auth' => \App\Http\Middleware\AuthMiddleware::class,\n            'XSS' => \App\Http\Middleware\XSSMiddleware::class,\n        ]);";
             
-            // Match ->withMiddleware(function (Middleware $middleware) { ... }) 
-            // OR ->withMiddleware(function ($middleware) { ... })
-            // Looking for the closing paren or brace of the function if it's empty
-            $pattern = "/(withMiddleware\s*\(\s*function\s*\(\s*(Middleware\s+)?\\\$[\w]+\s*\)\s*\{)/i";
-            
-            if (preg_match($pattern, $content)) {
-                $content = preg_replace($pattern, "$1" . $middlewareRegistration, $content);
-                File::put($appPath, $content);
-                $this->info("Registered middlewares in bootstrap/app.php");
+            // Extremely flexible match for withMiddleware block
+            if (str_contains($content, 'withMiddleware')) {
+                // Find where the function starts or the callback is
+                $targetPos = strpos($content, 'withMiddleware');
+                $openingBracePos = strpos($content, '{', $targetPos);
+                
+                if ($openingBracePos !== false) {
+                    // Check if there's already some content to avoid duplicate insertion if str_contains was imprecise
+                    if (!str_contains($content, "'XSS'") && !str_contains($content, '"XSS"')) {
+                         $content = substr_replace($content, $middlewareRegistration, $openingBracePos + 1, 0);
+                         File::put($appPath, $content);
+                         $this->info("Registered middlewares in bootstrap/app.php");
+                    }
+                } else {
+                     $this->warn("Found withMiddleware but couldn't find function start brace. Please add it manually.");
+                }
             } else {
-                $this->warn("Could not handle automatic middleware registration. Please add it manually to bootstrap/app.php.");
+                $this->warn("Could not find withMiddleware in bootstrap/app.php. Please register manually.");
             }
         }
     }

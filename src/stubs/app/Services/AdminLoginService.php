@@ -28,15 +28,17 @@ class AdminLoginService
 
         if (! Auth::guard('admin')->attempt($credentials)) {
             RateLimiter::hit($this->throttleKey($request));
-
+ 
             throw ValidationException::withMessages([
                 'user_name' => 'Invalid username or password.',
             ]);
         }
         RateLimiter::clear($this->throttleKey($request));
+        
+        $request->session()->put('admin_logged_in', true);
         $request->session()->regenerate();
-
-        return redirect()->to('admin');
+ 
+        return redirect()->intended('/admin');
     }
 
     /**

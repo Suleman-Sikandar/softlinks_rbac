@@ -10,13 +10,11 @@ class RbacServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        //
+        $this->registerAuthConfigs();
     }
-
+ 
     public function boot()
     {
-        $this->registerAuthConfigs();
-
         if ($this->app->runningInConsole()) {
             $this->commands([
                 InstallRbac::class,
