@@ -94,25 +94,30 @@ class InstallRbac extends Command
         if (File::exists($appPath)) {
             $content = File::get($appPath);
             
-            if (str_contains($content, "'XSS'") || str_contains($content, '"XSS"')) {
+            if (str_contains($content, "'admin.auth'") || str_contains($content, '"admin.auth"')) {
                 $this->info("Middlewares already registered in bootstrap/app.php");
                 return;
             }
  
-            $middlewareRegistration = "\n        \$middleware->alias([\n            'auth' => \App\Http\Middleware\AuthMiddleware::class,\n            'XSS' => \App\Http\Middleware\XSSMiddleware::class,\n        ]);";
+            $middlewareRegistration = "\n        \$middleware->alias([\n            'admin.auth' => \App\Http\Middleware\AuthMiddleware::class,\n            'XSS' => \App\Http\Middleware\XSSMiddleware::class,\n        ]);";
             
-            // 1. Try to find withMiddleware closure start
-            if (str_contains($content, 'withMiddleware')) {
-                $targetPos = strpos($content, '{', strpos($content, 'withMiddleware'));
-                if ($targetPos !== false) {
-                    $content = substr_replace($content, $middlewareRegistration, $targetPos + 1, 0);
+            // Search for withMiddleware in a way that captures basically any closure style
+            if (preg_match('/withMiddleware\s*\(\s*function\s*\(.*?\)\s*\{/i', $content, $matches, PREG_OFFSET_CAPTURE)) {
+                 $pos = $matches[0][1] + strlen($matches[0][0]);
+                 $content = substr_replace($content, $middlewareRegistration, $pos, 0);
+                 File::put($appPath, $content);
+                 $this->info("Registered middlewares in bootstrap/app.php");
+            } else if (str_contains($content, '->withMiddleware(')) {
+                // Try even simpler fallback
+                $pos = strpos($content, '{', strpos($content, '->withMiddleware('));
+                if ($pos !== false) {
+                    $content = substr_replace($content, $middlewareRegistration, $pos + 1, 0);
                     File::put($appPath, $content);
-                    $this->info("Registered middlewares in bootstrap/app.php");
-                    return;
+                    $this->info("Registered middlewares in bootstrap/app.php (Fallback method)");
                 }
+            } else {
+                $this->warn("Could not handle automatic middleware registration. Please add it manually to bootstrap/app.php.");
             }
-            
-            $this->warn("Could not find withMiddleware in bootstrap/app.php. Please add it manually.");
         }
     }
  
