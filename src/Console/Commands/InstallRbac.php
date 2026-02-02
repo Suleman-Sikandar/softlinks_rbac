@@ -99,17 +99,20 @@ class InstallRbac extends Command
                 return;
             }
  
-            $middlewareRegistration = "\n        \$middleware->alias([\n            'admin.auth' => \App\Http\Middleware\AuthMiddleware::class,\n            'XSS' => \App\Http\Middleware\XSSMiddleware::class,\n        ]);";
+            $middlewareRegistration = "\n        \$middleware->alias([\n            'auth' => \App\Http\Middleware\AuthMiddleware::class,\n            'XSS' => \App\Http\Middleware\XSSMiddleware::class,\n        ]);";
             
-            // Search for withMiddleware in a way that captures basically any closure style
-            if (preg_match('/withMiddleware\s*\(\s*function\s*\(.*?\)\s*\{/i', $content, $matches, PREG_OFFSET_CAPTURE)) {
-                 $pos = $matches[0][1] + strlen($matches[0][0]);
-                 $content = substr_replace($content, $middlewareRegistration, $pos, 0);
-                 File::put($appPath, $content);
-                 $this->info("Registered middlewares in bootstrap/app.php");
-            } else {
-                $this->warn("Could not handle automatic middleware registration. Please add it manually to bootstrap/app.php.");
+            // 1. Try to find withMiddleware closure start
+            if (str_contains($content, 'withMiddleware')) {
+                $targetPos = strpos($content, '{', strpos($content, 'withMiddleware'));
+                if ($targetPos !== false) {
+                    $content = substr_replace($content, $middlewareRegistration, $targetPos + 1, 0);
+                    File::put($appPath, $content);
+                    $this->info("Registered middlewares in bootstrap/app.php");
+                    return;
+                }
             }
+            
+            $this->warn("Could not find withMiddleware in bootstrap/app.php. Please add it manually.");
         }
     }
  
@@ -150,6 +153,7 @@ class InstallRbac extends Command
  
         if (File::exists($authConfigPath)) {
             $content = File::get($authConfigPath);
+            $modified = false;
  
             // Add Admin Guard
             if (!str_contains($content, "'admin' => [") && !str_contains($content, "\"admin\" => [")) {
@@ -157,6 +161,7 @@ class InstallRbac extends Command
                 if (preg_match("/(['\"]guards['\"])\s*=>\s*\[/i", $content, $matches, PREG_OFFSET_CAPTURE)) {
                     $pos = $matches[0][1] + strlen($matches[0][0]);
                     $content = substr_replace($content, $guardConfig, $pos, 0);
+                    $modified = true;
                     $this->info("Added 'admin' guard to config/auth.php");
                 }
             }
@@ -167,11 +172,14 @@ class InstallRbac extends Command
                 if (preg_match("/(['\"]providers['\"])\s*=>\s*\[/i", $content, $matches, PREG_OFFSET_CAPTURE)) {
                     $pos = $matches[0][1] + strlen($matches[0][0]);
                     $content = substr_replace($content, $providerConfig, $pos, 0);
+                    $modified = true;
                     $this->info("Added 'tbl_admin' provider to config/auth.php");
                 }
             }
  
-            File::put($authConfigPath, $content);
+            if ($modified) {
+                File::put($authConfigPath, $content);
+            }
         }
     }
 
