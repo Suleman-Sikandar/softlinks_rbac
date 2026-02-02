@@ -1,0 +1,340 @@
+        .card {
+            background-color: #fff !important;
+        }
+
+        .table {
+            background-color: #fff !important;
+        }
+
+        .table thead th {
+            background-color: #fff !important;
+            border-bottom: 1px solid #f0f2f4 !important;
+            padding: 1.2rem 1rem !important;
+        }
+
+        .table tbody td {
+            background-color: #fff !important;
+            padding: 1rem !important;
+            border-bottom: 1px solid #f0f2f4 !important;
+            vertical-align: middle;
+        }
+
+        .table-hover tbody tr:hover td {
+            background-color: #f8f9fa !important;
+            transition: background-color 0.2s ease;
+        }
+
+        /* Stylish Search Input */
+        .input-group-merge .form-control:focus {
+            box-shadow: none;
+            border-color: #d9dee3;
+        }
+
+        .input-group-merge .input-group-text {
+            border-right: 0;
+        }
+
+        /* Action Buttons */
+        .btn-label-primary {
+            background-color: #e7e7ff !important;
+            color: #696cff !important;
+        }
+
+        .btn-label-primary:hover {
+            background-color: #696cff !important;
+            color: #fff !important;
+        }
+
+        .btn-label-danger {
+            background-color: #ffe5e0 !important;
+            color: #ff3e1d !important;
+        }
+
+        .btn-label-danger:hover {
+            background-color: #ff3e1d !important;
+            color: #fff !important;
+        }
+
+        /* DataTables Customization */
+        .dataTables_wrapper .dataTables_paginate {
+            margin-top: 20px !important;
+            float: right !important;
+        }
+
+        .pagination .page-link {
+            border: none;
+            border-radius: 4px;
+            margin: 0 2px;
+            color: #566a7d;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #696cff;
+            color: #fff;
+            box-shadow: 0 2px 4px rgba(105, 108, 255, 0.4);
+        }
+
+        /* Drawer Custom Width */
+        .role-drawer {
+            width: 60% !important;
+            max-width: 60% !important;
+        }
+
+        /* Full width on smaller screens */
+        @media (max-width: 992px) {
+            .role-drawer {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+
+        /* Fix SweetAlert z-index */
+        div:where(.swal2-container) {
+            z-index: 10000 !important;
+        }
+
+        /* Pagination alignment and spacing */
+        .dataTables_wrapper .dataTables_paginate,
+        .pagination {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 50px;
+            padding-top: 20px;
+        }
+
+        .dataTables_wrapper .dataTables_info {
+            margin-top: 50px;
+        }
+
+        /* ============================================
+           PERMISSION CARDS - MODERN DESIGN
+           ============================================ */
+
+        /* Permission Card Base Styling */
+        .permission-card {
+            border-radius: 12px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            background: #ffffff;
+            border: 1px solid #e8eaed !important;
+        }
+
+        .permission-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Permission Card Header with Gradient */
+        .permission-card-header {
+            background: linear-gradient(135deg, #e5e5e8 0%, #eeeef3 0%) !important;
+            padding: 1.25rem 1.5rem !important;
+            border: none !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .permission-card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            pointer-events: none;
+        }
+
+        /* Alternative Header Color */
+        .permission-card-header-alt {
+            background: linear-gradient(135deg, #787bff 0%, #696cff 100%) !important;
+            padding: 1.25rem 1.5rem !important;
+            border: none !important;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .permission-card-header-alt::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 100%);
+            pointer-events: none;
+        }
+
+        /* Permission Item Styling */
+        .permission-item {
+            padding: 0.75rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            background: #f8f9fa;
+            border: 1px solid transparent;
+        }
+
+        .permission-item:hover {
+            background: #e8eaff;
+            border-color: #696cff;
+            transform: translateX(4px);
+        }
+
+        /* Custom Checkbox Styling */
+        .permission-checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #d0d5dd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .permission-checkbox:checked {
+            background-color: #696cff;
+            border-color: #696cff;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+        }
+
+        .permission-checkbox:focus {
+            box-shadow: 0 0 0 3px rgba(105, 108, 255, 0.2);
+            border-color: #696cff;
+        }
+
+        .permission-checkbox:hover {
+            border-color: #696cff;
+        }
+
+        /* Form Check Label */
+        .permission-item .form-check-label {
+            font-size: 0.9rem;
+            color: #344054;
+            font-weight: 500;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Select All Toggle Switch */
+        .select-all-toggle {
+            width: 48px;
+            height: 24px;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .select-all-toggle:checked {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-color: rgba(255, 255, 255, 1);
+        }
+
+        .select-all-toggle:focus {
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Card Body Enhancements */
+        .permission-card .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Section Headers */
+        .permission-card h6 {
+            font-size: 1.1rem;
+            letter-spacing: 0.3px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Icons in Headers */
+        .permission-card-header i,
+        .permission-card-header-alt i {
+            font-size: 1.3rem;
+            opacity: 0.95;
+        }
+
+        /* Responsive Grid Adjustments */
+        @media (max-width: 768px) {
+            .permission-item {
+                padding: 0.5rem;
+            }
+
+            .permission-card-header,
+            .permission-card-header-alt {
+                padding: 1rem !important;
+            }
+
+            .permission-card-header h6,
+            .permission-card-header-alt h6 {
+                font-size: 0.95rem;
+            }
+        }
+
+        /* Form Control Enhancements */
+        .form-control-lg {
+            border-radius: 8px;
+            border: 2px solid #e8eaed;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+
+        .form-control-lg:focus {
+            border-color: #696cff;
+            box-shadow: 0 0 0 4px rgba(105, 108, 255, 0.1);
+        }
+
+        /* Button Enhancements */
+        .btn-primary {
+            background: linear-gradient(135deg, #696cff 0%, #5f61e6 100%);
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #5f61e6 0%, #595cd9 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(105, 108, 255, 0.3);
+        }
+
+        .btn-light {
+            border: 2px solid #e8eaed;
+            transition: all 0.2s ease;
+        }
+
+        .btn-light:hover {
+            background-color: #f8f9fa;
+            border-color: #d0d5dd;
+        }
+
+        /* Animation for card entrance */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .permission-card {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* Stagger animation for multiple cards */
+        .permission-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .permission-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .permission-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .permission-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
