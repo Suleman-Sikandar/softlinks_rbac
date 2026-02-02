@@ -12,10 +12,14 @@ Route::get('login', [AdminLoginController::class, 'index'])->name('login');
 Route::post('login', [AdminLoginController::class, 'doLogin']);
 Route::get('logout', [AdminLoginController::class, 'logout'])->name('logout');
 /**
- * Dashboard Routes
+ * Admin Routes
  */
-Route::get('/admin', [DashboardController::class, 'index']);
-Route::middleware(['auth', 'XSS'])->group(function () {
+Route::middleware(['auth:admin', 'rbac.check', 'XSS'])->group(function () {
+    /**
+     * Dashboard Routes
+     */
+    Route::get('/admin', [DashboardController::class, 'index']);
+
 
 /**
  * Admin User Routes

@@ -93,8 +93,27 @@ class DeleteRbac extends Command
 
         // 6. Remove Package Namespace from composer.json
         $this->removePackageNamespaceFromComposer();
-
+ 
+        // 7. Remove Middlewares from bootstrap/app.php
+        $this->removeMiddlewares();
+ 
         $this->info('Softlinks RBAC Package files removed successfully.');
+    }
+ 
+    protected function removeMiddlewares()
+    {
+        $appPath = base_path('bootstrap/app.php');
+        if (File::exists($appPath)) {
+            $content = File::get($appPath);
+            
+            $middlewareRegistration = "\n        \$middleware->alias([\n            'rbac.check' => \App\Http\Middleware\RbacCheckMiddleware::class,\n            'XSS' => \App\Http\Middleware\XSSMiddleware::class,\n        ]);";
+            
+            if (str_contains($content, $middlewareRegistration)) {
+                $content = str_replace($middlewareRegistration, '', $content);
+                File::put($appPath, $content);
+                $this->info("Removed middlewares from bootstrap/app.php");
+            }
+        }
     }
 
     protected function removePackageNamespaceFromComposer()

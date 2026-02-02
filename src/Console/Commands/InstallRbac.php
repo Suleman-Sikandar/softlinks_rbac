@@ -65,31 +65,54 @@ class InstallRbac extends Command
         
         // 17. Copy Error Pages
         $this->copyDirectory('resources/views/errors');
-
+ 
+        // 18. Register Middlewares in bootstrap/app.php
+        $this->registerMiddlewares();
+ 
         $this->info('Softlinks RBAC Package files installed successfully.');
-
-        // 18. Clear Config Cache
+ 
+        // 19. Clear Config Cache
         $this->info('Clearing config cache...');
         $this->call('config:clear');
-
+ 
         // Ask to run migrations
         if ($this->confirm('Do you want to run the migrations now?')) {
             $this->call('migrate');
         }
-
+ 
         // Ask to run seeder
         if ($this->confirm('Do you want to seed the database with initial RBAC data now? (Creates Admin User and basic setup)')) {
             $this->call('db:seed', ['--class' => 'Database\Seeders\RbacSeeder']);
         }
         
         $this->info('Installation complete.');
-        $this->info('NOTE: Please register the middlewares in "bootstrap/app.php" manually if needed:');
-        $this->info('->withMiddleware(function (Middleware $middleware) {');
-        $this->info('    $middleware->alias([');
-        $this->info('        "auth" => \App\Http\Middleware\AuthMiddleware::class,');
-        $this->info('        "XSS" => \App\Http\Middleware\XSSMiddleware::class,');
-        $this->info('    ]);');
-        $this->info('})');
+    }
+ 
+    protected function registerMiddlewares()
+    {
+        $appPath = base_path('bootstrap/app.php');
+        if (File::exists($appPath)) {
+            $content = File::get($appPath);
+            
+            // Check if already registered
+            if (str_contains($content, "'rbac.check'") || str_contains($content, '"rbac.check"')) {
+                $this->info("Middlewares already registered in bootstrap/app.php");
+                return;
+            }
+ 
+            $middlewareRegistration = "\n        \$middleware->alias([\n            'rbac.check' => \App\Http\Middleware\RbacCheckMiddleware::class,\n            'XSS' => \App\Http\Middleware\XSSMiddleware::class,\n        ]);";
+            
+            // Look for withMiddleware(function (Middleware $middleware) {
+            $pattern = "/(withMiddleware\s*\(\s*function\s*\(\s*Middleware\s*\\\$middleware\s*\)\s*\{)/i";
+            
+            if (preg_match($pattern, $content)) {
+                $content = preg_replace($pattern, "$1" . $middlewareRegistration, $content);
+                File::put($appPath, $content);
+                $this->info("Registered middlewares in bootstrap/app.php");
+            } else {
+                $this->warn("Could not handle automatic middleware registration. Please add it manually to bootstrap/app.php.");
+            }
+        }
     }
 
     protected function copyDirectory($path)
