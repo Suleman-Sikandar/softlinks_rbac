@@ -1,0 +1,25 @@
+{
+    "name": "softlinks/rbac",
+    "description": "Softlinks RBAC Package",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Softlinks",
+            "email": "info@softlinks.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Softlinks\\Rbac\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Softlinks\\Rbac\\RbacServiceProvider"
+            ]
+        }
+    },
+    "require": {}
+}

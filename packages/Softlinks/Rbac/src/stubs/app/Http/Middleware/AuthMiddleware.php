@@ -14,7 +14,7 @@ class AuthMiddleware
         if (! Auth::guard('admin')->check()) {
             abort(404); 
         }
-        if(Auth::guard('admin') && !validatePermissions($request->route()->uri())){
+        if(Auth::guard('admin') && !\validatePermissions($request->route()->uri())){
             abort(403);
         }
         return $next($request);

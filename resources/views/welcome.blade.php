@@ -116,6 +116,13 @@
                                 Deploy now
                             </a>
                         </li>
+                        @if (Route::has('login'))
+                        <li>
+                            <a href="{{ route('login') }}" class="inline-block dark:bg-blue-600 dark:border-blue-600 dark:text-white dark:hover:bg-blue-700 dark:hover:border-blue-700 hover:bg-blue-800 hover:border-blue-800 px-5 py-1.5 bg-blue-700 rounded-sm border border-blue-700 text-white text-sm leading-normal">
+                                Login as Admin
+                            </a>
+                        </li>
+                        @endif
                     </ul>
                 </div>
                 <div class="bg-[#fff2f2] dark:bg-[#1D0002] relative lg:-ml-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-r-lg aspect-[335/376] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden">

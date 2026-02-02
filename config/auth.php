@@ -36,14 +36,17 @@ return [
     */
 
     'guards'           => [
+        
+        
+        
+        
+        
+        
         'web'   => [
             'driver'   => 'session',
             'provider' => 'users',
         ],
-        'admin' => [
-            'driver'   => 'session',
-            'provider' => 'tbl_admin',
-        ],
+        
     ],
 
     /*
@@ -64,14 +67,17 @@ return [
     */
 
     'providers'        => [
+        
+        
+        
+        
+        
+        
         'users'     => [
             'driver' => 'eloquent',
             'model'  => env('AUTH_MODEL', App\Models\User::class),
         ],
-        'tbl_admin' => [
-            'driver' => 'eloquent',
-            'model'  => App\Models\ACL\AdminUserModel::class,
-        ],
+        
     ],
 
     /*
