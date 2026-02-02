@@ -11,7 +11,8 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
-        "laravel/tinker": "^2.10.1"
+        "laravel/tinker": "^2.10.1",
+        "softlinks/rbac": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -26,8 +27,7 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-            "Softlinks\\Rbac\\": "packages/Softlinks/Rbac/src/"
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
@@ -85,6 +85,12 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "packages/Softlinks/Rbac"
+        }
+    ],
+    "minimum-stability": "dev",
     "prefer-stable": true
 }

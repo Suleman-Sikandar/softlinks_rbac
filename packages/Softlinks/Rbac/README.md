@@ -12,49 +12,38 @@ A robust, flexible, and easy-to-install Role-Based Access Control (RBAC) package
 
 ## 📥 Installation
 
-1. **Register the Package**:
-   Add the following to your root `composer.json` under `autoload.psr-4`:
+**For Production Use (Global):**
+Once published, you can install the package via Composer:
+```bash
+composer require softlinks/rbac
+```
+
+**For Development Use (Local):**
+1. Add the following to your root `composer.json` under `autoload.psr-4`:
    ```json
    "Softlinks\\Rbac\\": "packages/Softlinks/Rbac/src/"
    ```
+2. Run `composer dump-autoload`.
 
-2. **Dump Autoload**:
-   ```bash
-   composer dump-autoload
-   ```
+## 🚀 Getting Started
 
-3. **Install RBAC**:
-   Run the interactive installation command:
-   ```bash
-   php artisan softlinks:install-rbac
-   ```
-   *   Answer **Yes** to run migrations.
-   *   Answer **Yes** to run the seeder (creates default admin user).
+After installing, run the interactive setup:
+```bash
+php artisan softlinks:install-rbac
+```
 
-## 🔑 Default Credentials
+## 🌍 Making it Public (GitHub & Packagist)
 
-Once seeded, you can log in at `/login` with:
+To make this package work for others globally via `composer require`:
 
-- **Username**: `admin`
-- **Password**: `password`
+1.  **Host on GitHub**: Create a repository named `softlinks-rbac` and push this package folder.
+2.  **Submit to Packagist**: Go to [Packagist.org](https://packagist.org/), log in, and submit your GitHub URL.
+3.  **Automatic Autoload**: Once published, Composer will automatically handle the `Softlinks\Rbac` namespace—no manual `composer.json` edits required!
 
-## 🛠️ Commands
+## 🗑️ Clean Uninstallation
 
-| Command | Description |
-| :--- | :--- |
-| `php artisan softlinks:install-rbac` | Installs all stubs, updates config, and runs migrations/seeds. |
-| `php artisan softlinks:delete-rbac` | Removes all RBAC-related files and reverts configuration changes. |
+The delete command is now "smart"—it will automatically remove all files, revert config changes, and even clean up its own namespace from your `composer.json` if it was added manually.
 
-## 📐 Architecture
-
-- **Guard**: `admin` (Session-based)
-- **Provider**: `tbl_admin` (Eloquent)
-- **Primary Tables**: `tbl_admin`, `tbl_roles`, `tbl_modules`, `tbl_role_privileges`
-- **Permission Check**: Uses `validatePermissions($slug)` helper via `AuthMiddleware`.
-
-## 🗑️ Uninstallation
-
-To completely remove the package files and revert configuration:
 ```bash
 php artisan softlinks:delete-rbac
 ```

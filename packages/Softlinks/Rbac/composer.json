@@ -1,5 +1,6 @@
 {
     "name": "softlinks/rbac",
+    "version": "1.0.0",
     "description": "Softlinks RBAC Package",
     "type": "library",
     "license": "MIT",

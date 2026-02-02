@@ -91,7 +91,30 @@ class DeleteRbac extends Command
         // 5. Remove Helper from composer.json
         $this->removeHelperFromComposer();
 
+        // 6. Remove Package Namespace from composer.json
+        $this->removePackageNamespaceFromComposer();
+
         $this->info('Softlinks RBAC Package files removed successfully.');
+    }
+
+    protected function removePackageNamespaceFromComposer()
+    {
+        $composerPath = base_path('composer.json');
+        if (File::exists($composerPath)) {
+            $content = json_decode(File::get($composerPath), true);
+            $modified = false;
+
+            if (isset($content['autoload']['psr-4']['Softlinks\\Rbac\\'])) {
+                unset($content['autoload']['psr-4']['Softlinks\\Rbac\\']);
+                $modified = true;
+                $this->info("Removed 'Softlinks\\Rbac\\' namespace from composer.json");
+            }
+
+            if ($modified) {
+                File::put($composerPath, json_encode($content, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+                $this->runComposerCommand('dump-autoload');
+            }
+        }
     }
 
     protected function removeAuthConfig()
